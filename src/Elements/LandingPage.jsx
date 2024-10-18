@@ -69,7 +69,6 @@ function LandingPage() {
             <video src={videofile} autoPlay loop muted></video>
           </div>
         </div>
-
         <div
           style={{
             backgroundColor: "#10a37f",
