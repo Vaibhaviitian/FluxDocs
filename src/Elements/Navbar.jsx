@@ -2,6 +2,7 @@ import React from "react";
 import "./Navbar.css";
 import { useGSAP } from "@gsap/react";
 import gsap from 'gsap'
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   useGSAP(()=>{
@@ -39,9 +40,9 @@ export default function Navbar() {
               <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
             </svg>
           </label>
-          <a class="home-link" href="index.html">
+          <Link class="home-link" to='/'>
             Home
-          </a>
+          </Link>
           <a href="https://chatgpt.com/?oai-dm=1">About</a>
           <a href="https://chatgpt.com/?oai-dm=1">Products</a>
           <a href="https://chatgpt.com/?oai-dm=1">Blog</a>

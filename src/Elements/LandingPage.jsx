@@ -3,6 +3,7 @@ import "./LandingPage.css"; // Ensure your CSS is correctly linked
 import videofile from "./video.mp4";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { Link } from "react-router-dom";
 
 function LandingPage() {
   const playButtonRef = useRef(null);
@@ -92,7 +93,7 @@ function LandingPage() {
             margin:'10px'
           }}
         >
-          <button class="cssbuttons-io-button">
+          <Link class="cssbuttons-io-button" to='/doc-editing'>
             Get started
             <div class="icon">
               <svg
@@ -108,7 +109,7 @@ function LandingPage() {
                 ></path>
               </svg>
             </div>
-          </button>
+          </Link>
         </div>
         <div
           style={{
