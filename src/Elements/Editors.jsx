@@ -10,12 +10,12 @@ function Editor() {
   const [quill, setQuill] = useState(null);
   const { id: documentId } = useParams();
 
-  // Socket Connection
+  // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
     const s = io("http://localhost:1000", {
       reconnection: true,
       reconnectionAttempts: 5,
-      reconnectionDelay: 1000
+      reconnectionDelay: 1000,
     });
 
     s.on("connect", () => {
@@ -33,13 +33,13 @@ function Editor() {
     };
   }, []);
 
-  // Document Loading
+  // Purpose: Fetches the document data from the server and initializes the editor.
   useEffect(() => {
     if (!socket || !quill) return;
 
     const handleLoadDocument = (document) => {
       console.log("Loaded document:", document);
-      
+
       if (document && document.data) {
         quill.setContents(document.data);
       } else {
@@ -53,6 +53,7 @@ function Editor() {
 
     return () => {
       socket.off("load-document", handleLoadDocument);
+      // This ensures that the load-document listener is removed when the component is unmounted to prevent memory leaks.
     };
   }, [socket, quill, documentId]);
 
@@ -77,6 +78,7 @@ function Editor() {
 
     const handleTextChange = (delta, oldDelta, source) => {
       if (source !== "user") return;
+      // /The check source !== "user" ensures the client only sends its changes, not changes from other users.
       socket.emit("send-changes", delta);
     };
 
@@ -90,11 +92,12 @@ function Editor() {
   // Auto Save
   useEffect(() => {
     if (!socket || !quill) return;
-    
+
     const savingInterval = setInterval(() => {
-      socket.emit('save-changes', quill.getContents());
+      socket.emit("save-changes", quill.getContents());
+      console.log(quill.getContents());
       console.log("Auto-saving document...");
-    }, 2000);  // Increased to 2 seconds for less frequent saves
+    }, 1000); // Increased to 2 seconds for less frequent saves
 
     return () => {
       clearInterval(savingInterval);
@@ -115,12 +118,12 @@ function Editor() {
   // Quill Editor Initialization
   const initializeQuill = useCallback((wrapper) => {
     if (!wrapper) return;
-    
+
     wrapper.innerHTML = "";
-    
+
     const editorContainer = document.createElement("div");
-    editorContainer.setAttribute('class', 'ql-container ql-snow');
-    
+    editorContainer.setAttribute("class", "ql-container ql-snow");
+
     wrapper.appendChild(editorContainer);
 
     const q = new Quill(editorContainer, {
@@ -130,8 +133,10 @@ function Editor() {
       },
     });
 
-    q.disable();  
-    q.setText("Loading document...");
+    q.disable();
+    q.setText(
+      "Wait please the server is not runnig that's why we are not able to fetch the data from database"
+    );
     setQuill(q);
   }, []);
 
