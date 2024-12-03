@@ -15,6 +15,8 @@ import SignInPage from "./Elements/SignIn.jsx";
 import SignUpPage from "./Elements/SignUp.jsx";
 import Privateroutes from "./Elements/PrivateRoute.jsx";
 import { v4 as uuidV4 } from "uuid";
+import ContactUs from "./Elements/Contactus.jsx";
+import AboutUs from "./Elements/Aboutus.jsx";
 // Define all routes in a single array
 const routes = [
   {
@@ -41,6 +43,14 @@ const routes = [
   {
     path: "/signup",
     element: <SignUpPage />,
+  },
+  {
+    path: "/contactus",
+    element: <ContactUs />,
+  },
+  {
+    path: "/aboutus",
+    element: <AboutUs />,
   },
 ];
 

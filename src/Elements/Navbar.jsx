@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Navbar.css";
-import { useGSAP } from "@gsap/react";
-import gsap from 'gsap'
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  return ( 
+  const [check,setCheck]= useState(false)
+  useEffect(()=>{
+    const authtoken = localStorage.getItem('token');
+    if(authtoken){
+      setCheck(true);
+    }else{
+      setCheck(false);
+    }
+  },[])
+  console.log(check);
+  return (
     <>
-      <nav className="m-2 text-2xl" style={{fontWeight:'bolder'}} >
+      <nav className="m-2 text-2xl" style={{ fontWeight: "bolder" }}>
         <input type="checkbox" id="sidebar-active" />
         <label for="sidebar-active" className="open-sidebar-button">
           <svg
@@ -31,13 +39,19 @@ export default function Navbar() {
               <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
             </svg>
           </label>
-          <Link className="home-link" to='/'>
+          <Link className="home-link" to="/">
             Home
           </Link>
-          <a href="#">About</a>
-          <a href="$">Products</a>
-          <a href="/signup">Signup</a>
-          <a href="/login">Login</a>
+          <a href="/aboutus">About us</a>
+          <a href="/contactus">Contact</a>
+          {!check ? (
+            <>
+              <a href="/signup">Signup</a>
+              <a href="/login">Login</a>
+            </>
+          ) : (
+            <Link to='www.xhamster.com'>Dashboard</Link>
+          )}
         </div>
       </nav>
     </>
