@@ -93,9 +93,9 @@ function LandingPage() {
             margin:'10px'
           }}
         >
-          <Link class="cssbuttons-io-button" to='/doc-editing'>
+          <Link className="cssbuttons-io-button" to='/doc-editing'>
             Get started
-            <div class="icon">
+            <div className="icon">
               <svg
                 height="24"
                 width="24"
