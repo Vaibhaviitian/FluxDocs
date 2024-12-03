@@ -13,9 +13,8 @@ import Aboutus from "./Elements/Aboutus.jsx";
 import Editor from "./Elements/Editors.jsx";
 import SignInPage from "./Elements/SignIn.jsx";
 import SignUpPage from "./Elements/SignUp.jsx";
-
+import Privateroutes from "./Elements/PrivateRoute.jsx";
 import { v4 as uuidV4 } from "uuid";
-
 // Define all routes in a single array
 const routes = [
   {
@@ -28,15 +27,19 @@ const routes = [
         path: "doc-editing",
         element: <Navigate to={`/api/new/FluxDocs/${uuidV4()}`} />,
       },
-      { path: "api/new/FluxDocs/:id", element: <Editor /> },
+      { path: "api/new/FluxDocs/:id", element: (
+        <Privateroutes>
+          <Editor />
+        </Privateroutes>
+      ), },
     ],
   },
   {
-    path: "login",
+    path: "/login",
     element: <SignInPage />,
   },
   {
-    path: "signup",
+    path: "/signup",
     element: <SignUpPage />,
   },
 ];

@@ -5,15 +5,6 @@ import gsap from 'gsap'
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  useGSAP(()=>{
-    gsap.from('a',{
-      y:100,
-      opacity:0,
-      duration:1,
-      scale:0, 
-      stagger:0.2
-    })
-  })
   return ( 
     <>
       <nav className="m-2 text-2xl" style={{fontWeight:'bolder'}} >
@@ -43,10 +34,10 @@ export default function Navbar() {
           <Link className="home-link" to='/'>
             Home
           </Link>
-          <a href="https://chatgpt.com/?oai-dm=1">About</a>
-          <a href="https://chatgpt.com/?oai-dm=1">Products</a>
-          <a href="https://chatgpt.com/?oai-dm=1">Blog</a>
-          <a href="https://chatgpt.com/?oai-dm=1">Login</a>
+          <a href="#">About</a>
+          <a href="$">Products</a>
+          <a href="/signup">Signup</a>
+          <a href="/login">Login</a>
         </div>
       </nav>
     </>
