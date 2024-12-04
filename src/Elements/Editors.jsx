@@ -97,7 +97,7 @@ function Editor() {
       socket.emit("save-changes", quill.getContents());
       console.log(quill.getContents());
       console.log("Auto-saving document...");
-    }, 1000); // Increased to 2 seconds for less frequent saves
+    }, 2000); 
 
     return () => {
       clearInterval(savingInterval);
