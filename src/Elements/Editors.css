@@ -1,60 +1,157 @@
 *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #F3F3F3;
+  margin: 0;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.ql-editor {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 1in;
+  margin: 1rem;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  background-color: white;
+}
+
+.ql-container.ql-snow {
+  border: none;
+  display: flex;
+  justify-content: center;
+}
+
+.ql-toolbar.ql-snow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 50px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #ffffff;
+  border: none;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 1000px;
+}
+
+@page {
+  margin: 1in;
+}
+
+@media print {
   body {
-    background-color: #F3F3F3;
+    background: none;
+  }
+
+  .ql-editor {
+    width: 6.5in;
+    height: 9in;
+    padding: 0;
     margin: 0;
+    box-shadow: none;
+    align-self: flex-start;
   }
-  
-  .box .ql-editor {
-    width: 8.5in;
-    min-height: 11in;
-    padding: 1in;
-    margin: 1rem;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);
-    background-color: white;
+
+  .ql-toolbar.ql-snow {
+    display: none;
   }
-  
-  .box .ql-container.ql-snow {
-    border: none;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .box .ql-toolbar.ql-snow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    height: 50px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #ffffff;
-    border: none;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
-    border-radius: 1000px;
-  }
-  @page {
-    margin: 1in;
-  }
-  
-  @media print {
-    body {
-      background: none;
-    }
-  
-    .box .ql-editor {
-      width: 6.5in;
-      height: 9in;
-      padding: 0;
-      margin: 0;
-      box-shadow: none;
-      align-self: flex-start;
-    }
-  
-    .box .ql-toolbar.ql-snow {
-      display: none;
-    }
-  }
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-form {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  position: relative;
+}
+
+.popup-form h3 {
+  margin-bottom: 20px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.popup-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.popup-input:focus {
+  border-color: #007bff;
+}
+
+.popup-submit-button,
+.popup-close-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 5px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.popup-submit-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.popup-close-button:hover {
+  background-color: #dc3545;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.save-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+  margin-top: 20px;
+}
+
+.save-button:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
