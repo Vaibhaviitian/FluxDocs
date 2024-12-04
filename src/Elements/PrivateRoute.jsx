@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const Privateroutes = ({ children }) => {
   const Authorization = localStorage.getItem("token");
   const [isverified, setIsverified] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const handlingverification = async () => {
@@ -32,7 +32,7 @@ const Privateroutes = ({ children }) => {
       setIsverified(false);
       toast.error("Token verification failed. Please log in again.");
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
 
@@ -42,18 +42,28 @@ const Privateroutes = ({ children }) => {
 
   useEffect(() => {
     if (!isLoading && !isverified) {
-      navigate("/login"); 
+      navigate("/login");
     }
   }, [isLoading, isverified, navigate]);
 
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div class="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (
     <>
       <ToastContainer />
-      {isverified ? children : null} 
+      {isverified ? children : null}
     </>
   );
 };

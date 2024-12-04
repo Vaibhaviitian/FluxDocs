@@ -35,7 +35,11 @@ const routes = [
           <Editor />
         </Privateroutes>
       ), },
-      { path: "dashboard", element: <Dashboard /> },
+      { path: "dashboard", element: (
+        <Privateroutes>
+          <Dashboard/>
+        </Privateroutes>
+      ) },
     ],
   },
   {

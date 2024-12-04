@@ -26,8 +26,10 @@ function SignInPage() {
       console.log(response);
       localStorage.setItem('itemhai',response.data.user._id);
       localStorage.setItem('token',response.data.jwttoken);
+      localStorage.setItem('username',response.data.user.username);
+      localStorage.setItem('email',response.data.user.email);
       toast.success(response.data.message);
-      navigate("/doc-editing");
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
       if (error?.response?.data?.message) {
@@ -134,7 +136,7 @@ function SignInPage() {
           </form>
           <p className="mt-6 text-center text-sm text-gray-500">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:underline">
+            <Link to="/dashboard" className="text-blue-600 hover:underline">
               Sign up
             </Link>
           </p>
