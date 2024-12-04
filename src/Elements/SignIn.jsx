@@ -27,7 +27,6 @@ function SignInPage() {
       localStorage.setItem('itemhai',response.data.user._id);
       localStorage.setItem('token',response.data.jwttoken);
       toast.success(response.data.message);
-      setIsload(false);
       navigate("/doc-editing");
     } catch (error) {
       console.log(error);
