@@ -50,7 +50,7 @@ export default function Navbar() {
               <a href="/login">Login</a>
             </>
           ) : (
-            <Link to='www.xhamster.com'>Dashboard</Link>
+            <Link to='/dashboard'>Dashboard</Link>
           )}
         </div>
       </nav>

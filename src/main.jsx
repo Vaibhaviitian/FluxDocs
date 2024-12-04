@@ -17,6 +17,7 @@ import Privateroutes from "./Elements/PrivateRoute.jsx";
 import { v4 as uuidV4 } from "uuid";
 import ContactUs from "./Elements/Contactus.jsx";
 import AboutUs from "./Elements/Aboutus.jsx";
+import Dashboard from "./Elements/Dashboard.jsx";
 // Define all routes in a single array
 const routes = [
   {
@@ -34,6 +35,7 @@ const routes = [
           <Editor />
         </Privateroutes>
       ), },
+      { path: "dashboard", element: <Dashboard /> },
     ],
   },
   {
