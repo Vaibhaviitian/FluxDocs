@@ -9,9 +9,8 @@ function Editor() {
   const [socket, setSocket] = useState(null);
   const [quill, setQuill] = useState(null);
   const { id: documentId } = useParams();
-  const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState("");
 
+  // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
     const s = io("http://localhost:1000", {
       reconnection: true,
@@ -34,16 +33,17 @@ function Editor() {
     };
   }, []);
 
+  // Purpose: Fetches the document data from the server and initializes the editor.
   useEffect(() => {
     if (!socket || !quill) return;
 
     const handleLoadDocument = (document) => {
+      // console.log("Loaded document:", document);
+
       if (document && document.data) {
         quill.setContents(document.data);
       } else {
-        quill.setText(
-          "Wait please, the server is not running, so we are not able to fetch the data from the database."
-        );
+        quill.setText("Start typing...");
       }
       quill.enable();
     };
@@ -53,9 +53,11 @@ function Editor() {
 
     return () => {
       socket.off("load-document", handleLoadDocument);
+      // This ensures that the load-document listener is removed when the component is unmounted to prevent memory leaks.
     };
   }, [socket, quill, documentId]);
 
+  // Receive Changes from Other Users
   useEffect(() => {
     if (!socket || !quill) return;
 
@@ -70,11 +72,13 @@ function Editor() {
     };
   }, [socket, quill]);
 
+  // Send Local Changes
   useEffect(() => {
     if (!socket || !quill) return;
 
     const handleTextChange = (delta, oldDelta, source) => {
       if (source !== "user") return;
+      // /The check source !== "user" ensures the client only sends its changes, not changes from other users.
       socket.emit("send-changes", delta);
     };
 
@@ -85,29 +89,22 @@ function Editor() {
     };
   }, [socket, quill]);
 
+  // Auto Save
   useEffect(() => {
     if (!socket || !quill) return;
 
     const savingInterval = setInterval(() => {
       socket.emit("save-changes", quill.getContents());
-      console.log(quill.getContents());
-      console.log("Auto-saving document...");
-    }, 2000);
+      // console.log(quill.getContents());
+      // console.log("Auto-saving document...");
+    }, 2000); // Increased to 2 seconds for less frequent saves
 
     return () => {
       clearInterval(savingInterval);
     };
   }, [socket, quill]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert(`Submitted title: ${title}`);
-    setIsOpen(false);
-    socket.emit('',)
-    setTitle("");
-  };
-
-  useEffect(() => {}, [socket, quill]);
+  // Toolbar Configuration
   const ToolbarOptions = [
     [{ font: [] }, { size: [] }],
     ["bold", "italic", "underline", "strike"],
@@ -118,6 +115,7 @@ function Editor() {
     ["link", "image", "video"],
   ];
 
+  // Quill Editor Initialization
   const initializeQuill = useCallback((wrapper) => {
     if (!wrapper) return;
 
@@ -137,50 +135,14 @@ function Editor() {
 
     q.disable();
     q.setText(
-      "Wait please, the server is not running, so we are not able to fetch the data from the database."
+      "Wait please the server is not runnig that's why we are not able to fetch the data from database"
     );
     setQuill(q);
   }, []);
 
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
-    <div className="editor-container">
+    <div className="box">
       <div ref={initializeQuill}></div>
-      <button onClick={togglePopup} className="save-button">
-        SAVE
-      </button>
-      {isOpen && (
-        <div className="popup-overlay">
-          <div className="popup-form">
-            <h3>Title:</h3>
-            <form onSubmit={handleSubmit}>
-              <label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="popup-input"
-                  required="true"
-                />
-              </label>
-              <br />
-              <button type="submit" className="popup-submit-button">
-                Submit
-              </button>
-              <button
-                type="button"
-                onClick={togglePopup}
-                className="popup-close-button"
-              >
-                Close
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
