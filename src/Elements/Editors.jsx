@@ -4,6 +4,8 @@ import "quill/dist/quill.snow.css";
 import "./Editors.css";
 import { io } from "socket.io-client";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function Editor() {
   const [socket, setSocket] = useState(null);
@@ -11,6 +13,29 @@ function Editor() {
   const { id: documentId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
+  const [core, setcore] = useState(false);
+  const checkingowner = async () => {
+    try {
+      const docid = documentId;
+      const user_id = localStorage.getItem("itemhai");
+      const response = await axios.post(
+        "http://localhost:1000/api/user/checking-the-owner",
+        {
+          docid,
+          user_id,
+        }
+      );
+      console.log(response);
+      setcore(response.data.message);
+      setTitle("");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.data.message);
+    }
+  };
+  useEffect(() => {
+    checkingowner();
+  }, []);
 
   // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
@@ -107,12 +132,29 @@ function Editor() {
       clearInterval(savingInterval);
     };
   }, [socket, quill]);
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Submitted title: ${title}`);
     setIsOpen(false);
-    socket.emit("");
-    setTitle("");
+    try {
+      const docid = documentId;
+      const user_id = localStorage.getItem("itemhai");
+      const response = await axios.post(
+        "http://localhost:1000/api/user/saving-the-doc",
+        {
+          title,
+          docid,
+          user_id,
+        }
+      );
+      console.log(response);
+      if (response.data.message) {
+        toast.success(response.data.message);
+      }
+      setTitle("");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.data.message);
+    }
   };
   useEffect(() => {}, [socket, quill]);
   // Toolbar Configuration
@@ -157,9 +199,11 @@ function Editor() {
   return (
     <div className="editor-container">
       <div ref={initializeQuill}></div>
-      <button onClick={togglePopup} className="save-button">
-        SAVE
-      </button>
+      {core && (
+        <button onClick={togglePopup} className="save-button">
+          SAVE
+        </button>
+      )}
       {isOpen && (
         <div className="popup-overlay">
           <div className="popup-form">
