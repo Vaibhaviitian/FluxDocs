@@ -9,6 +9,8 @@ function Editor() {
   const [socket, setSocket] = useState(null);
   const [quill, setQuill] = useState(null);
   const { id: documentId } = useParams();
+  const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState("");
 
   // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
@@ -43,7 +45,9 @@ function Editor() {
       if (document && document.data) {
         quill.setContents(document.data);
       } else {
-        quill.setText("Start typing...");
+        quill.setText(
+          "Wait please, the server is not running, so we are not able to fetch the data from the database."
+        );
       }
       quill.enable();
     };
@@ -103,7 +107,14 @@ function Editor() {
       clearInterval(savingInterval);
     };
   }, [socket, quill]);
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(`Submitted title: ${title}`);
+    setIsOpen(false);
+    socket.emit("");
+    setTitle("");
+  };
+  useEffect(() => {}, [socket, quill]);
   // Toolbar Configuration
   const ToolbarOptions = [
     [{ font: [] }, { size: [] }],
@@ -139,10 +150,45 @@ function Editor() {
     );
     setQuill(q);
   }, []);
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <div className="box">
+    <div className="editor-container">
       <div ref={initializeQuill}></div>
+      <button onClick={togglePopup} className="save-button">
+        SAVE
+      </button>
+      {isOpen && (
+        <div className="popup-overlay">
+          <div className="popup-form">
+            <h3>Title:</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="popup-input"
+                  required="true"
+                />
+              </label>
+              <br />
+              <button type="submit" className="popup-submit-button">
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={togglePopup}
+                className="popup-close-button"
+              >
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
