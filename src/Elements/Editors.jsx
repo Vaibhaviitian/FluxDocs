@@ -39,9 +39,10 @@ function Editor() {
     } catch (error) {
       // Comprehensive error handling
       console.log(error);
-      if (error.response) {
+      if (error.response.data.message.toString()==="Document not found.") {
         console.error("Error response:", error.response.data);
         console.error("Status code:", error.response.status);
+        toast.error('Refresh your page once for saving the doc')
       }
     }
   };
