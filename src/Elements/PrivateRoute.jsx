@@ -18,11 +18,11 @@ const Privateroutes = ({ children }) => {
           Authorization,
         }
       );
-      console.log(response);
+      // console.log(response);
 
       if (response.data.success) {
         setIsverified(true);
-        toast.success("Token verified! Welcome to your private area.");
+        // toast.success("Token verified! Welcome to your private area.");
       } else {
         setIsverified(false);
         toast.error("Unauthorized access. Please log in.");

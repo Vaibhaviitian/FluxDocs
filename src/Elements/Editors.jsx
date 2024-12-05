@@ -14,27 +14,40 @@ function Editor() {
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [core, setcore] = useState(false);
+  const user_id = localStorage.getItem("itemhai");
   const checkingowner = async () => {
     try {
-      const docid = documentId;
-      const user_id = localStorage.getItem("itemhai");
       const response = await axios.post(
         "http://localhost:1000/api/user/checking-the-owner",
         {
-          docid,
-          user_id,
+          docid: documentId,
         }
       );
-      console.log(response);
-      setcore(response.data.message);
+      if (
+        !response.data.message ||
+        user_id.toString() === response.data.data.toString() ||
+        response.data.data.toString() === "Doc not having any owner save it to"
+      ) {
+        console.log(response.data.data);
+        if(response.data.data.toString() === "Doc not having any owner save it to"){
+          toast.success(response.data.data);
+        }
+        console.log(user_id + response.data.data);
+        setcore(true);
+      }
       setTitle("");
     } catch (error) {
+      // Comprehensive error handling
       console.log(error);
-      toast.error(error.data.message);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        console.error("Status code:", error.response.status);
+      }
     }
   };
   useEffect(() => {
     checkingowner();
+    console.log(core);
   }, []);
 
   // Purpose: Establishes a connection to the Socket.IO server
@@ -195,7 +208,6 @@ function Editor() {
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
-
   return (
     <div className="editor-container">
       <div ref={initializeQuill}></div>
