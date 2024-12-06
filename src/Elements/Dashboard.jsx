@@ -60,6 +60,11 @@ const Dashboard = () => {
     console.log(`Navigating to project with ID: ${projectId}`);
     navigate(redirectingDocUrl); 
   };
+
+  const handlelogout = () => {
+    localStorage.clear();
+    location.reload();
+  }
   
   return (
     <div className="dashboard">
@@ -74,6 +79,9 @@ const Dashboard = () => {
         <Link className="new-project-btn" to="/doc-editing">
           New Project
         </Link>
+        <button className="bg-red-500 p-3 border-r-4 text-white" to="/doc-editing" onClick={handlelogout}>
+          Logout
+        </button>
       </div>
       <div className="projects-container">
         <div className="projects-list">
