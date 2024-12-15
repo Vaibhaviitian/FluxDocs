@@ -18,7 +18,7 @@ const Privateroutes = ({ children }) => {
           Authorization,
         }
       );
-      // console.log(response);
+      console.log(response);
 
       if (response.data.success) {
         setIsverified(true);

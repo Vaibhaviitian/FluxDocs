@@ -18,6 +18,7 @@ import { v4 as uuidV4 } from "uuid";
 import ContactUs from "./Elements/Contactus.jsx";
 import AboutUs from "./Elements/Aboutus.jsx";
 import Dashboard from "./Elements/Dashboard.jsx";
+import Community from "./Elements/Community.jsx";
 // Define all routes in a single array
 const routes = [
   {
@@ -40,6 +41,11 @@ const routes = [
           <Dashboard/>
         </Privateroutes>
       ) },
+      { path: "community", element: (
+        <Privateroutes>
+          <Community />
+        </Privateroutes>
+      ), },
     ],
   },
   {

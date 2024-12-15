@@ -28,7 +28,7 @@ const Dashboard = () => {
         console.log(response);
         if (response.data.message) {
           // console.log(response.data.message);
-          toast.success(response.data.message);
+          // toast.success(response.data.message);
         }
         // const sharedProjectsData = [
         //   {
