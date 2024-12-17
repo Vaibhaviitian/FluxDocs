@@ -12,7 +12,7 @@ function Community() {
       if (response) {
         setdata(response.data.data);
       }
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error("Error fetching documents:", error);
     }
@@ -24,7 +24,7 @@ function Community() {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="bg-white shadow-lg h-screen rounded-lg overflow-hidden border border-gray-300">
+      <div className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-300">
         <div className="bg-teal-600 text-white p-6 rounded-t-lg">
           <h2 className="text-3xl font-semibold text-center">
             FluxDocs Collaboration Community

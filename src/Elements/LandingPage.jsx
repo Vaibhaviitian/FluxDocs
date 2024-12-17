@@ -30,27 +30,6 @@ function LandingPage() {
       duration: 0.5,
       stagger: 0.1,
     });
-    gsap.from("#elem1", {
-      x: -100,
-      opacity: 0,
-      delay: 3,
-      duration: 0.5,
-      stagger: 0.1,
-    });
-    gsap.from("#elem2", {
-      y: 100,
-      opacity: 0,
-      delay: 3.5,
-      duration: 0.5,
-      stagger: 0.1,
-    });
-    gsap.from("#elem3", {
-      x: 100,
-      opacity: 0,
-      delay: 3.9,
-      duration: 0.5,
-      stagger: 0.5,
-    });
   });
 
   return (

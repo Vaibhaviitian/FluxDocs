@@ -19,6 +19,7 @@ import ContactUs from "./Elements/Contactus.jsx";
 import AboutUs from "./Elements/Aboutus.jsx";
 import Dashboard from "./Elements/Dashboard.jsx";
 import Community from "./Elements/Community.jsx";
+import Notifications from "./Elements/Notifications.jsx";
 // Define all routes in a single array
 const routes = [
   {
@@ -31,21 +32,38 @@ const routes = [
         path: "doc-editing",
         element: <Navigate to={`/api/new/FluxDocs/${uuidV4()}`} />,
       },
-      { path: "api/new/FluxDocs/:id", element: (
-        <Privateroutes>
-          <Editor />
-        </Privateroutes>
-      ), },
-      { path: "dashboard", element: (
-        <Privateroutes>
-          <Dashboard/>
-        </Privateroutes>
-      ) },
-      { path: "community", element: (
-        <Privateroutes>
-          <Community />
-        </Privateroutes>
-      ), },
+      {
+        path: "api/new/FluxDocs/:id",
+        element: (
+          <Privateroutes>
+            <Editor />
+          </Privateroutes>
+        ),
+      },
+      {
+        path: "dashboard",
+        element: (
+          <Privateroutes>
+            <Dashboard />
+          </Privateroutes>
+        ),
+      },
+      {
+        path: "community",
+        element: (
+          <Privateroutes>
+            <Community />
+          </Privateroutes>
+        ),
+      },
+      {
+        path: "notifications",
+        element: (
+          <Privateroutes>
+            <Notifications/>
+          </Privateroutes>
+        ),
+      },
     ],
   },
   {

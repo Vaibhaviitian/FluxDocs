@@ -3,16 +3,16 @@ import "./Navbar.css";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  const [check,setCheck]= useState(false)
-  useEffect(()=>{
-    const authtoken = localStorage.getItem('token');
-    if(authtoken){
+  const [check, setCheck] = useState(false);
+  useEffect(() => {
+    const authtoken = localStorage.getItem("token");
+    if (authtoken) {
       setCheck(true);
-    }else{
+    } else {
       setCheck(false);
     }
-  },[])
-  console.log(check);
+  }, []);
+  // console.log(check);
   return (
     <>
       <nav className="m-2 text-2xl" style={{ fontWeight: "bolder" }}>
@@ -42,15 +42,19 @@ export default function Navbar() {
           <Link className="home-link" to="/">
             Home
           </Link>
-          <a href="/aboutus">About us</a>
-          <a href="/contactus">Contact</a>
           {!check ? (
             <>
               <a href="/signup">Signup</a>
               <a href="/login">Login</a>
+              <a href="/contactus">Contact</a>
+              <a href="/aboutus">About us</a>
             </>
           ) : (
-            <Link to='/dashboard'>Dashboard</Link>
+            <>
+              <Link to="/community">Community</Link>
+              <Link to="./notifications">Notifications</Link>
+              <Link to="/dashboard">Dashboard</Link>
+            </>
           )}
         </div>
       </nav>
