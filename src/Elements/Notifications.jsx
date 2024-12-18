@@ -1,5 +1,7 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Example Notification Data
 
@@ -10,8 +12,8 @@ export default function NotificationTabs() {
   const [docinfo, setDocinfo] = useState({});
 
   const [incomingNotifications, setIncomingNotifications] = useState([]);
+  const user_id = localStorage.getItem("itemhai");
   const incomingNotifications_handler = async () => {
-    const user_id = localStorage.getItem("itemhai");
     try {
       const response = await axios.post(
         "http://localhost:1000/api/collabs/my_requests",
@@ -38,6 +40,38 @@ export default function NotificationTabs() {
       console.log(response);
       setSentNotifications(response?.data?.data);
     } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const acceptingrequest = async (request_id) => {
+    try {
+      const action = "accepted";
+      console.log(user_id, request_id, action);
+      const response = await axios.post(
+        "http://localhost:1000/api/collabs/handling_request",
+        { user_id, request_id, action }
+      );
+      console.log(response);
+      toast.success(response?.data?.message);
+    } catch (error) {
+      toast.error(error?.response?.message);
+      console.log(error);
+    }
+  };
+
+  const rejectingrequest = async (request_id) => {
+    try {
+      const action = "rejected";
+      console.log(action, user_id, request_id);
+      const response = await axios.post(
+        "http://localhost:1000/api/collabs/handling_request",
+        { action, request_id, user_id }
+      );
+      console.log(response);
+      toast.success(response?.data?.message);
+    } catch (error) {
+      toast.error(error?.response?.message);
       console.log(error);
     }
   };
@@ -128,7 +162,7 @@ export default function NotificationTabs() {
           </>
         )}
 
-        {/* Incoming Requests Tab */}
+        {/* Incoming Requests Tab because you are owner of that doc*/}
         {activeTab === "incoming" && (
           <>
             {incomingNotifications.length > 0 ? (
@@ -148,7 +182,8 @@ export default function NotificationTabs() {
                         Incoming request by{" "}
                         <span className="font-bold">
                           {item.requester.username} ({item.requester.email})
-                        </span>{" "}<br/>
+                        </span>{" "}
+                        <br />
                         asking for edit access
                       </p>
                       <p className="text-gray-500 text-sm">{item.updatedAt}</p>
@@ -173,13 +208,17 @@ export default function NotificationTabs() {
                     {item.status === "pending" && (
                       <div className="flex gap-2 mt-2 sm:mt-0">
                         <button
-                          onClick={() => handleReply(item.id, "accepted")}
+                          onClick={() => {
+                            acceptingrequest(item._id);
+                          }}
                           className="px-4 py-2 bg-green-100 ml-2 text-green-600 font-semibold rounded-md transition hover:bg-green-200"
                         >
                           Accept
                         </button>
                         <button
-                          onClick={() => handleReply(item.id, "rejected")}
+                          onClick={() => {
+                            rejectingrequest(item._id);
+                          }}
                           className="px-4 py-2 bg-red-100 text-red-600 font-semibold rounded-md transition hover:bg-red-200 ml-2"
                         >
                           Reject
@@ -196,8 +235,8 @@ export default function NotificationTabs() {
             )}
           </>
         )}
-        
       </div>
+      <ToastContainer />
     </div>
   );
 }
