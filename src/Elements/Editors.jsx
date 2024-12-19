@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { act, useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "./Editors.css";
 import { io } from "socket.io-client";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -15,6 +15,26 @@ function Editor() {
   const [title, setTitle] = useState("");
   const [core, setcore] = useState(false);
   const user_id = localStorage.getItem("itemhai");
+  const location = useLocation();
+  const { action } = location.state || {};
+
+  const initializeQuill = useCallback((wrapper) => {
+    if (wrapper == null) return;
+
+    wrapper.innerHTML = "";
+
+    const editor = document.createElement("div");
+    wrapper.append(editor);
+
+    const q = new Quill(editor, {
+      theme: "snow",
+      modules: { toolbar: ToolbarOptions },
+      readOnly: true,
+    });
+    q.setText("Loading...");
+    setQuill(q);
+  }, []);
+
   const checkingowner = async () => {
     try {
       const response = await axios.post(
@@ -29,8 +49,13 @@ function Editor() {
         response.data.data.toString() === "Doc not having any owner save it to"
       ) {
         console.log(response.data.data);
-        if(response.data.data.toString() === "Doc not having any owner save it to"){
-          toast.success(response.data.data);
+        if (
+          response.data.data.toString() ===
+          "Doc not having any owner save it to"
+        ) {
+          setTimeout(() => {
+            toast.info(response.data.data);
+          }, 4000);
         }
         console.log(user_id + response.data.data);
         setcore(true);
@@ -39,10 +64,10 @@ function Editor() {
     } catch (error) {
       // Comprehensive error handling
       console.log(error);
-      if (error.response.data.message.toString()==="Document not found.") {
+      if (error.response.data.message.toString() === "Document not found.") {
         console.error("Error response:", error.response.data);
         console.error("Status code:", error.response.status);
-        toast.error('Refresh your page once for saving the doc')
+        window.location.reload();
       }
     }
   };
@@ -79,7 +104,7 @@ function Editor() {
     if (!socket || !quill) return;
 
     const handleLoadDocument = (document) => {
-      // console.log("Loaded document:", document);
+      console.log("Loaded document:", document);
 
       if (document && document.data) {
         quill.setContents(document.data);
@@ -88,7 +113,17 @@ function Editor() {
           "Wait please, the server is not running, so we are not able to fetch the data from the database."
         );
       }
-      quill.enable();
+      console.log(action);
+      if (action && action.toString() === "edit") {
+        quill.enable();
+        console.log("maai chala");
+      } else if (action && action.toString() === "view") {
+        quill.enable(false);
+        console.log("else if");
+      } else {
+        quill.enable();
+        console.log("else ");
+      }
     };
 
     socket.on("load-document", handleLoadDocument);
@@ -99,7 +134,6 @@ function Editor() {
       // This ensures that the load-document listener is removed when the component is unmounted to prevent memory leaks.
     };
   }, [socket, quill, documentId]);
-
   // Receive Changes from Other Users
   useEffect(() => {
     if (!socket || !quill) return;
@@ -170,7 +204,6 @@ function Editor() {
       toast.error(error.data.message);
     }
   };
-  useEffect(() => {}, [socket, quill]);
   // Toolbar Configuration
   const ToolbarOptions = [
     [{ font: [] }, { size: [] }],
@@ -182,30 +215,6 @@ function Editor() {
     ["link", "image", "video"],
   ];
 
-  // Quill Editor Initialization
-  const initializeQuill = useCallback((wrapper) => {
-    if (!wrapper) return;
-
-    wrapper.innerHTML = "";
-
-    const editorContainer = document.createElement("div");
-    editorContainer.setAttribute("class", "ql-container ql-snow");
-
-    wrapper.appendChild(editorContainer);
-
-    const q = new Quill(editorContainer, {
-      theme: "snow",
-      modules: {
-        toolbar: ToolbarOptions,
-      },
-    });
-
-    q.disable();
-    q.setText(
-      "Wait please the server is not runnig that's why we are not able to fetch the data from database"
-    );
-    setQuill(q);
-  }, []);
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };

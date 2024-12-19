@@ -4,11 +4,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Card({ document }) {
-  const owner = document.owner._id.toString();
-  const user_id = localStorage.getItem("itemhai")?.toString() || "";
+  // console.log(document);
+  if (!(document && document.owner && document.owner._id)) {
+    console.log("ahhhuhhhhhh");
+    return null;
+  }
+  console.log(document.owner._id);
+
   const doc_id = document._id;
+  const user_id = localStorage.getItem("itemhai")?.toString() || "";
   const permission = "edit";
-  let status="";
+  let status = "";
 
   const sending_request = async () => {
     // console.log(user_id, doc_id, "view");
@@ -22,16 +28,15 @@ function Card({ document }) {
         }
       );
       console.log(response);
-      status = response.data.status   
+      status = response.data.status;
       toast.success(`${response?.data?.message}`);
     } catch (error) {
       console.log(error);
       toast.error("chud gaye");
     }
-
   };
 
-  if (owner === user_id) {
+  if (document.owner === user_id) {
     // console.log("Do not render if the document belongs to the current user");
     return null;
   }
@@ -59,12 +64,12 @@ function Card({ document }) {
             className="mt-4 bg-teal-500 text-white py-2 px-4 rounded-lg hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600"
             onClick={sending_request}
           >
-            {status==="" ? <>Request to Collaborate</>: console.log(status) }
+            {status === "" ? <>Request to Collaborate</> : console.log(status)}
           </button>
         </div>
       </div>
-      <ToastContainer/>
-    </div>  
+      <ToastContainer />
+    </div>
   );
 }
 

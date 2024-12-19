@@ -35,8 +35,10 @@ function Community() {
         </div>
         <div className="p-6">
           <div className="space-y-6">
-            {data.map((doc) => (
-              <Card key={doc._id} document={doc} />
+            {data.map((document) => (
+              // console.log(document),
+              console.log("chud gaye"),
+              <Card document={document} />
             ))}
           </div>
         </div>
