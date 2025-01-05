@@ -1,4 +1,4 @@
-import React, { act, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "./Editors.css";
@@ -17,7 +17,7 @@ function Editor() {
   const user_id = localStorage.getItem("itemhai");
   const location = useLocation();
   const { action } = location.state || {};
-
+  // console.log(documentId);
   const initializeQuill = useCallback((wrapper) => {
     if (wrapper == null) return;
 
@@ -218,6 +218,45 @@ function Editor() {
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
+
+  const userName = localStorage.getItem("username");
+  useEffect(() => {
+    if (!quill) return;
+    const handleSelectionChange = (range, oldRange, source) => {
+      if (range) {
+        if (range.length === 0) {
+          console.log("User cursor is on", range.index);
+          socket.emit("selection-change", {
+            documentId,
+            userName,
+            cursorPosition: range.index,
+          });
+        } else {
+          const text = quill.getText(range.index, range.length);
+          console.log("User has highlighted", text);
+          socket.emit("selection-change", {
+            documentId,
+            userName,
+            highlightedText: text,
+            range: range,
+          });
+        }
+      } else {
+        console.log("Cursor not in the editor");
+        socket.emit("selection-change", {
+          documentId,
+          userName,
+          cursorPosition: null,
+        });
+      }
+    };
+
+    quill.on("selection-change", handleSelectionChange);
+    return () => {
+      quill.off("selection-change", handleSelectionChange);
+    };
+  }, [quill, documentId, userName]);
+
   return (
     <div className="editor-container">
       <div ref={initializeQuill}></div>

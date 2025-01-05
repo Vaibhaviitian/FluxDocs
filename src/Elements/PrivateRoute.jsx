@@ -30,7 +30,7 @@ const Privateroutes = ({ children }) => {
     } catch (error) {
       console.error("Token verification failed:", error);
       setIsverified(false);
-      toast.error("Token verification failed. Please log in again.");
+      toast.error("Session timeout , Token has been expired,Login again");
     } finally {
       setIsLoading(false);
     }
