@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import LandingPage from "./Elements/LandingPage.jsx";
 import Aboutus from "./Elements/Aboutus.jsx";
-import Editor from "./Elements/Editors.jsx";
+import {Editor} from "./Elements/Editors.jsx";
 import SignInPage from "./Elements/SignIn.jsx";
 import SignUpPage from "./Elements/SignUp.jsx";
 import Privateroutes from "./Elements/PrivateRoute.jsx";

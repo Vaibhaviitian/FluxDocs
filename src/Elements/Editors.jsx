@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { act, useCallback, useEffect, useState } from "react";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import "./Editors.css";
@@ -6,9 +6,11 @@ import { io } from "socket.io-client";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ActiveUsers from "./ActiveUser";
 
 function Editor() {
   const [socket, setSocket] = useState(null);
+  const [activeUsers, setActiveUsers] = useState([]);
   const [quill, setQuill] = useState(null);
   const { id: documentId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -17,6 +19,11 @@ function Editor() {
   const user_id = localStorage.getItem("itemhai");
   const location = useLocation();
   const { action } = location.state || {};
+  const [musibat, setMusibat] = useState(() => {
+    const saved = localStorage.getItem("docmeinkaamkarnewale");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [docinfo, setDocinfo] = useState();
   // console.log(documentId);
   const initializeQuill = useCallback((wrapper) => {
     if (wrapper == null) return;
@@ -220,82 +227,130 @@ function Editor() {
   };
 
   const userName = localStorage.getItem("username");
+  // bhai idhar se thoda bhaang bhosda ho gaaya hai
+
   useEffect(() => {
-    if (!quill) return;
-    const handleSelectionChange = (range, oldRange, source) => {
-      if (range) {
-        if (range.length === 0) {
-          console.log("User cursor is on", range.index);
-          socket.emit("selection-change", {
-            documentId,
-            userName,
-            cursorPosition: range.index,
-          });
-        } else {
-          const text = quill.getText(range.index, range.length);
-          console.log("User has highlighted", text);
-          socket.emit("selection-change", {
-            documentId,
-            userName,
-            highlightedText: text,
-            range: range,
-          });
-        }
-      } else {
-        console.log("Cursor not in the editor");
-        socket.emit("selection-change", {
-          documentId,
-          userName,
-          cursorPosition: null,
-        });
-      }
-    };
+    const s = io("http://localhost:1000", {
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
 
-    quill.on("selection-change", handleSelectionChange);
+    s.on("connect", () => {
+      console.log("Socket connected successfully");
+
+      // Emit join-document event with user details
+      const userName = localStorage.getItem("username");
+      const userID = localStorage.getItem("itemhai");
+      s.emit("join-document", {
+        documentId,
+        userID,
+        userName,
+      });
+    });
+
+    setSocket(s);
+
     return () => {
-      quill.off("selection-change", handleSelectionChange);
+      s.disconnect();
     };
-  }, [quill, documentId, userName]);
+  }, [documentId]);
+  useEffect(() => {
+    if (!socket) return;
 
+    const handleActiveUsers = (activeUsersList) => {
+      console.log("Active Users:", activeUsersList);
+      // Optional: Update your state or UI here to display active users
+    };
+
+    socket.on("active-users", handleActiveUsers);
+
+    return () => {
+      socket.off("active-users", handleActiveUsers);
+    };
+  }, [socket]);
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleActiveUsers = (activeUsersList) => {
+      console.log("Active Users:", activeUsersList);
+      if (activeUsersList && activeUsersList.length > 0) {
+        setMusibat(activeUsersList);
+        localStorage.setItem(
+          "docmeinkaamkarnewale",
+          JSON.stringify(activeUsersList)
+        );
+      }
+      setActiveUsers(activeUsersList);
+    };
+
+    socket.on("active-users", handleActiveUsers);
+
+    return () => {
+      socket.off("active-users", handleActiveUsers);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    console.log(musibat);
+    localStorage.setItem("docmeinkaamkarnewale", JSON.stringify(musibat));
+  }, []);
+  useEffect(() => {
+    console.log(activeUsers);
+  }, []);
+
+  const getdocinfo = async () => {
+    const resposne = await axios.post('http://localhost:1000/api/collabs/individual_docs',{
+      id : documentId
+    })
+    console.log(resposne.data.message);
+    setDocinfo(resposne?.data?.message);
+  };
+  useEffect(()=>{
+    getdocinfo();
+  },[])
   return (
-    <div className="editor-container">
-      <div ref={initializeQuill}></div>
-      {core && (
-        <button onClick={togglePopup} className="save-button">
-          SAVE
-        </button>
-      )}
-      {isOpen && (
-        <div className="popup-overlay">
-          <div className="popup-form">
-            <h3>Title:</h3>
-            <form onSubmit={handleSubmit}>
-              <label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="popup-input"
-                  required="true"
-                />
-              </label>
-              <br />
-              <button type="submit" className="popup-submit-button">
-                Submit
-              </button>
-              <button
-                type="button"
-                onClick={togglePopup}
-                className="popup-close-button"
-              >
-                Close
-              </button>
-            </form>
+    <>
+      <ActiveUsers users={activeUsers.length > 0 ? activeUsers : musibat} docinfo={docinfo}/>
+      <div className="editor-container">
+        <div ref={initializeQuill}></div>
+        {core && (
+          <button onClick={togglePopup} className="save-button">
+            SAVE
+          </button>
+        )}
+        {isOpen && (
+          <div className="popup-overlay">
+            <div className="popup-form">
+              <h3>Title:</h3>
+              <form onSubmit={handleSubmit}>
+                <label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="popup-input"
+                    required="true"
+                  />
+                </label>
+                <br />
+                <button type="submit" className="popup-submit-button">
+                  Submit
+                </button>
+                <button
+                  type="button"
+                  onClick={togglePopup}
+                  className="popup-close-button"
+                >
+                  Close
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
 
-export default Editor;
+export { Editor };

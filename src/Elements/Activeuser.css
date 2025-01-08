@@ -1,0 +1,109 @@
+/* Container holding both sections (Document Info + Active Users) */
+.active-user-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px;
+  padding: 10px;
+}
+
+.doc-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  gap: 20px;
+}
+
+.doc-info,
+.active-users {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1;
+}
+
+/* Header for Document Name */
+.doc-name {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Collaborators Section */
+.collaborators-title {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* Each Collaborator info */
+.collaborator {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+/* Active Users Section */
+.active-users h4 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+/* Live User Indicator */
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.users-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.user-item {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.user-name {
+  margin-left: 10px;
+}
+
+/* Styles for different screen sizes */
+
+/* Mobile - Small devices */
+@media (max-width: 600px) {
+  .doc-container {
+    flex-direction: column;
+  }
+
+  .doc-info,
+  .active-users {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+/* Medium devices (Tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .doc-container {
+    flex-direction: column;
+  }
+
+  .doc-info,
+  .active-users {
+    width: 100%;
+  }
+}
+
+/* Larger devices (Desktop) */
+@media (min-width: 1025px) {
+  .doc-container {
+    flex-direction: row;
+  }
+}
