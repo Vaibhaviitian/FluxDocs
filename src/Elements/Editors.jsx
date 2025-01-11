@@ -24,6 +24,10 @@ function Editor() {
     return saved ? JSON.parse(saved) : [];
   });
   const [docinfo, setDocinfo] = useState();
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [chatMessage, setChatMessage] = useState("");
+
   // console.log(documentId);
   const initializeQuill = useCallback((wrapper) => {
     if (wrapper == null) return;
@@ -298,22 +302,100 @@ function Editor() {
   useEffect(() => {
     console.log(activeUsers);
   }, []);
+  useEffect(() => {
+    if (!socket) return;
 
+    socket.on("new-message-to-all", (message) => {
+      console.log("Broadcast message received:", message);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { user: message.userName, text: message.chatMessage },
+      ]);
+    });
+
+    return () => {
+      socket?.off("new-message-to-all");
+    };
+  }, [socket]);
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+    const newMessage = { user: "You", text: chatMessage };
+
+    socket.emit("sending-message", { chatMessage, userName }, (response) => {
+      console.log(userName);
+      console.log("Message sent: " + chatMessage);
+      console.log("Server response: " + response);
+    });
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setChatMessage("");
+  };
   const getdocinfo = async () => {
-    const resposne = await axios.post('http://localhost:1000/api/collabs/individual_docs',{
-      id : documentId
-    })
+    const resposne = await axios.post(
+      "http://localhost:1000/api/collabs/individual_docs",
+      {
+        id: documentId,
+      }
+    );
     console.log(resposne.data.message);
     setDocinfo(resposne?.data?.message);
   };
-  useEffect(()=>{
+  useEffect(() => {
     getdocinfo();
-  },[])
+  }, []);
   return (
     <>
-      <ActiveUsers users={activeUsers.length > 0 ? activeUsers : musibat} docinfo={docinfo}/>
+      <ActiveUsers
+        users={activeUsers.length > 0 ? activeUsers : musibat}
+        docinfo={docinfo}
+      />
       <div className="editor-container">
         <div ref={initializeQuill}></div>
+        <div className="live-chat-container">
+          <div
+            className={`chat-toggle ${isChatOpen ? "open" : "close"}`}
+            onClick={() => setIsChatOpen(!isChatOpen)}
+          >
+            💬
+          </div>
+          {isChatOpen && (
+            <div className="chat-box">
+              <div className="chat-header">
+                <span>Live Chat</span>
+                <button onClick={() => setIsChatOpen(false)}>✖</button>
+              </div>
+              <div className="chat-body">
+                {messages.map(
+                  (msg, index) => (
+                    (
+                      <div
+                        key={index}
+                        className="chat-message"
+                        style={{
+                          // console.log(background);
+                          backgroundColor:
+                            msg.user == "You" ? "#DCF8C6" : "#EDEDED",
+                        }}
+                      >
+                        <strong>{msg.user}:</strong> {msg.text}
+                      </div>
+                    )
+                  )
+                )}
+              </div>
+              <form className="chat-input" onSubmit={sendMessage}>
+                <input
+                  type="text"
+                  value={chatMessage}
+                  onChange={(e) => setChatMessage(e.target.value)}
+                  placeholder="Type a message..."
+                  required
+                />
+                <button type="submit">Send</button>
+              </form>
+            </div>
+          )}
+        </div>
         {core && (
           <button onClick={togglePopup} className="save-button">
             SAVE

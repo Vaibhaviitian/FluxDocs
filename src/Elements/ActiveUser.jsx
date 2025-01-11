@@ -2,7 +2,7 @@ import React from "react";
 import "./Activeuser.css";
 
 const ActiveUsers = ({ users, docinfo }) => {
-  console.log(users, docinfo);
+  // console.log(users, docinfo);
 
   return (
     <div className="active-user-container ">
@@ -15,7 +15,7 @@ const ActiveUsers = ({ users, docinfo }) => {
           <h4 className="collaborators-title">Collaborators:</h4>
           {docinfo?.collaborators && docinfo.collaborators.length > 0 ? (
             docinfo.collaborators.map((each, index) => {
-              console.log(each);
+              // console.log(each);
               return (
                 <div key={index} className="collaborator">
                   <b>{each.user.username || "Unknown User"}</b> -{" "}
