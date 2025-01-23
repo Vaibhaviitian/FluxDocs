@@ -8,7 +8,7 @@ export default function Navbar() {
     const authtoken = localStorage.getItem("token");
     if (authtoken) {
       setCheck(true);
-    } else {
+    } else {        
       setCheck(false);
     }
   }, []);

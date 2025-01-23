@@ -32,14 +32,14 @@ const routes = [
         path: "doc-editing",
         element: <Navigate to={`/api/new/FluxDocs/${uuidV4()}`} />,
       },
-      {
-        path: "api/new/FluxDocs/:id",
-        element: (
-          <Privateroutes>
-            <Editor />
-          </Privateroutes>
-        ),
-      },
+          {
+            path: "api/new/FluxDocs/:id",
+            element: (
+              <Privateroutes>
+                <Editor />
+              </Privateroutes>
+            ),
+          },
       {
         path: "dashboard",
         element: (

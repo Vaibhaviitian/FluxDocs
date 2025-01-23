@@ -46,7 +46,7 @@ function LandingPage() {
             <span>WORLD</span>
           </span>
           <div className="videocontainer">
-            <video src={videofile} autoPlay loop muted></video>
+            <video src={"https://cdn.pixabay.com/video/2023/10/01/183108-870151713_tiny.mp4"} autoPlay loop muted></video>
           </div>
         </div>
         <div
