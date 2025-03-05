@@ -49,7 +49,7 @@ function Editor() {
   const checkingowner = async () => {
     try {
       const response = await axios.post(
-        "https://backendgoogledoc.onrender.com/api/user/checking-the-owner",
+        "http://localhost:1000/api/user/checking-the-owner",
         {
           docid: documentId,
         }
@@ -89,7 +89,7 @@ function Editor() {
 
   // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
-    const s = io("https://backendgoogledoc.onrender.com", {
+    const s = io("http://localhost:1000", {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
@@ -198,7 +198,7 @@ function Editor() {
       const docid = documentId;
       const user_id = localStorage.getItem("itemhai");
       const response = await axios.post(
-        "https://backendgoogledoc.onrender.com/api/user/saving-the-doc",
+        "http://localhost:1000/api/user/saving-the-doc",
         {
           title,
           docid,
@@ -332,7 +332,7 @@ function Editor() {
   };
   const getdocinfo = async () => {
     const resposne = await axios.post(
-      "https://backendgoogledoc.onrender.com/api/collabs/individual_docs",
+      "http://localhost:1000/api/collabs/individual_docs",
       {
         id: documentId,
       }

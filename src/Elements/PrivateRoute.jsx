@@ -13,7 +13,7 @@ const Privateroutes = ({ children }) => {
   const handlingverification = async () => {
     try {
       const response = await axios.post(
-        "https://backendgoogledoc.onrender.com/api/user/checkforauthentication",
+        "http://localhost:1000/api/user/checkforauthentication",
         {
           Authorization,
         }

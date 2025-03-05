@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./LandingPage.css"; 
+import "./LandingPage.css"; // Ensure your CSS is correctly linked
 import videofile from "./video.mp4";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";

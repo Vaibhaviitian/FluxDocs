@@ -16,7 +16,7 @@ function Card({ document, batabe, query }) {
   const sending_request = async () => {
     try {
       const response = await axios.post(
-        "https://backendgoogledoc.onrender.com/api/collabs/sending_request",
+        "http://localhost:1000/api/collabs/sending_request",
         { user_id, doc_id, permission }
       );
       toast.success(`${response?.data?.message}`);
