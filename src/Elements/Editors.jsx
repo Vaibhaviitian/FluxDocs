@@ -49,7 +49,7 @@ function Editor() {
   const checkingowner = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:1000/api/user/checking-the-owner",
+        "https://backendgoogledoc.onrender.com/api/user/checking-the-owner",
         {
           docid: documentId,
         }
@@ -198,7 +198,7 @@ function Editor() {
       const docid = documentId;
       const user_id = localStorage.getItem("itemhai");
       const response = await axios.post(
-        "http://localhost:1000/api/user/saving-the-doc",
+        "https://backendgoogledoc.onrender.com/api/user/saving-the-doc",
         {
           title,
           docid,
@@ -332,7 +332,7 @@ function Editor() {
   };
   const getdocinfo = async () => {
     const resposne = await axios.post(
-      "http://localhost:1000/api/collabs/individual_docs",
+      "https://backendgoogledoc.onrender.com/api/collabs/individual_docs",
       {
         id: documentId,
       }

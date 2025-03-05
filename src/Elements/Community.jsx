@@ -12,7 +12,7 @@ function Community() {
   const getting_alldocs = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:1000/api/collabs/all_docs"
+        "https://backendgoogledoc.onrender.com/api/collabs/all_docs"
       );
       if (response) {
         setdata(response.data.data);

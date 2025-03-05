@@ -19,7 +19,7 @@ const Dashboard = () => {
     try {
       // Simulate fetching data from the backend
       const response = await axios.post(
-        "http://localhost:1000/api/user/my_docs",
+        "https://backendgoogledoc.onrender.com/api/user/my_docs",
         {
           user_id,
         }
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const getting_alldocs = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:1000/api/collabs/all_docs"
+        "https://backendgoogledoc.onrender.com/api/collabs/all_docs"
       );
       const updatedSharedProjects = [];
 
@@ -70,7 +70,7 @@ const Dashboard = () => {
     console.log(id);
     console.log("delete");
     const response = await axios.post(
-      "http://localhost:1000/api/collabs/delete_doc",
+      "https://backendgoogledoc.onrender.com/api/collabs/delete_doc",
       {
         id,
       }
@@ -94,6 +94,7 @@ const Dashboard = () => {
   const handlelogout = () => {
     localStorage.clear();
     location.reload();
+    navigate("/");
   };
 
   return (

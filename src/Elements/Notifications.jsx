@@ -16,7 +16,7 @@ export default function NotificationTabs() {
   const incomingNotifications_handler = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:1000/api/collabs/my_requests",
+        "https://backendgoogledoc.onrender.com/api/collabs/my_requests",
         {
           user_id,
         }
@@ -32,7 +32,7 @@ export default function NotificationTabs() {
     const user_id = localStorage.getItem("itemhai");
     try {
       const response = await axios.post(
-        "http://localhost:1000/api/collabs/sended_requests",
+        "https://backendgoogledoc.onrender.com/api/collabs/sended_requests",
         {
           user_id,
         }
@@ -49,7 +49,7 @@ export default function NotificationTabs() {
       const action = "accepted";
       console.log(user_id, request_id, action);
       const response = await axios.post(
-        "http://localhost:1000/api/collabs/handling_request",
+        "https://backendgoogledoc.onrender.com/api/collabs/handling_request",
         { user_id, request_id, action }
       );
       console.log(response);
@@ -65,7 +65,7 @@ export default function NotificationTabs() {
       const action = "rejected";
       console.log(action, user_id, request_id);
       const response = await axios.post(
-        "http://localhost:1000/api/collabs/handling_request",
+        "https://backendgoogledoc.onrender.com/api/collabs/handling_request",
         { action, request_id, user_id }
       );
       console.log(response);

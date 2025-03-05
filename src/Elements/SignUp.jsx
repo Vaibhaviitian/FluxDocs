@@ -15,7 +15,7 @@ function SignUpPage() {
       e.preventDefault();
       console.log(username, email, password);
       const response = await axios.post(
-        "http://localhost:1000/api/user/Register",
+        "https://backendgoogledoc.onrender.com/api/user/Register",
         {
           username,
           email,
