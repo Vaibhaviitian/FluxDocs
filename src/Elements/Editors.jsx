@@ -89,7 +89,7 @@ function Editor() {
 
   // Purpose: Establishes a connection to the Socket.IO server
   useEffect(() => {
-    const s = io("http://localhost:1000", {
+    const s = io("https://backendgoogledoc.onrender.com", {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
